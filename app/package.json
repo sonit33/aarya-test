@@ -2,26 +2,16 @@
   "name": "app",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/server.js",
+  "main": "src/server.js",
   "type": "module",
   "scripts": {
-    "clean": "rimraf dist/*",
-    "tsc": "tsc",
-    "dev": "nodemon --watch src -e ts,ejs --exec npm run dev:start",
-    "build": "npm-run-all clean tsc",
-    "cp-views": "mkdir -p ./dist/views && cp -R ./src/views/* ./dist/views",
-    "cp-scripts": "mkdir -p ./dist/public/scripts && cp -R ./src/public/scripts/* ./dist/public/scripts",
-    "cp-styles": "mkdir -p ./dist/public && npx tailwindcss -i ./src/public/styles/input.css -o ./dist/public/styles/output.css",
-    "cp-else": "cp .env ./dist",
-    "dev:start": "npm-run-all build cp-styles cp-views cp-scripts cp-else start",
-    "start": "node dist/server.js"
+    "css-out": "npx tailwindcss -i ./src/public/styles/input.css -o ./src/public/styles/output.css",
+    "start": "npm run css-out && node ."
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/dotenv": "8.2.0",
-    "@types/jquery": "^3.5.16",
     "cookie-parser": "1.4.6",
     "dotenv": "16.0.3",
     "ejs": "3.1.9",
@@ -29,15 +19,7 @@
     "jquery": "^3.6.4"
   },
   "devDependencies": {
-    "@types/cookie-parser": "1.4.3",
-    "@types/express": "4.17.17",
-    "@types/fs-extra": "9.0.13",
-    "@types/node": "20.1.0",
-    "fs-extra": "10.1.0",
     "nodemon": "2.0.22",
-    "npm-run-all": "4.1.5",
-    "rimraf": "3.0.2",
-    "tailwindcss": "3.3.2",
-    "ts-node": "10.9.1"
+    "tailwindcss": "3.3.2"
   }
 }

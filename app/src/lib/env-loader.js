@@ -4,7 +4,7 @@ export function initEnv() {
   dotenv.config();
 }
 
-export function readEnv(key: string) {
+export function readEnv(key) {
   return process.env[key];
 }
 
