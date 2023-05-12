@@ -1,4 +1,5 @@
 extends ../layout.pug
+include ../../mixins/icon_button
 
 block form
     form(id="login-form")
@@ -22,8 +23,7 @@ block form
             label(for="confirmPassword" class="flex-1 text-xs text-gray-400 uppercase") Password
             input(class="rounded text-base border-2 border-blue-50 p-2 flex-1" type="password" name="confirmPassword" id="confirmPassword" placeholder="New password again")
         .mt-4.flex 
-            button(type="submit"
-                class="border-2 border-blue-200 bg-blue-100 shadow rounded px-4 p-2 hover:bg-orange-100 hover:border-orange-200 flex-1") Continue
+            +icon_button("continue-button", "arrow_forward", "Continue")
         div(class="mt-4 flex flex-col text-sm gap-2 text-gray-500")
             a(class="w-fit hover:underline mx-auto" href="/login") Already have an account? Login
 

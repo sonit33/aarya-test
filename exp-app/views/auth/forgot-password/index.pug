@@ -1,4 +1,5 @@
 extends ../layout.pug
+include ../../mixins/icon_button
 
 block form 
     form(id="login-form")
@@ -8,8 +9,7 @@ block form
             input(class="rounded text-base border-2 border-blue-50 p-2 flex-1" type="email" name="email" id="email"
                 placeholder="Enter your email address")
         .mt-4.flex 
-            button(type="submit"
-                class="border-2 border-blue-200 bg-blue-100 shadow rounded px-4 p-2 hover:bg-orange-100 hover:border-orange-200 flex-1") Continue
+            +icon_button("continue-button", "arrow_forward", "Continue")
         div(class="mt-4 flex flex-col text-sm gap-2 text-gray-500")
             a(class="w-fit hover:underline mx-auto" href="/signup") Don't have an account? Signup
             a(class="w-fit hover:underline mx-auto" href="/login") Try Login again

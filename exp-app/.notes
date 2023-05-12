@@ -1,0 +1,7 @@
+Connect to EC2 using`ssh -i "sanjeet-050623-mini.pem" ec2-user@ec2-54-204-79-109.compute-1.amazonaws.com`
+Check the status of node after a server restart using `nvm list`
+If node/npm fails with command not found then `nvm use 16.20.0`
+See if nginx is running `sudo systemctl status nginx`
+Start if not `sudo systemctl start nginx`
+The app is git cloned at ~
+`git pull https://github.com/sonit33/aarya-test.git` if you want to update followed by `npm install`

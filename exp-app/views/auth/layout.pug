@@ -1,47 +1,16 @@
 extends ../layout.pug
+include ../mixins/image_button
 
 block content 
-    div(class="max-w-md lg:max-w-lg mx-auto h-screen flex flex-col justify-around")
-            div(class="flex flex-col")
-                div(class="justify-center flex")
-                    img(alt="aarya logo" src="/images/aarya-logo.svg" class="h-32 mb-8 p-4 border-1 border-gray-200 rounded shadow")
-                block form
-                    form(id="login-form")
-                        h1(class="text-2xl font-hubot text-center") Create a New Account
-                        div(class="mt-4 flex flex-col")
-                            label(for="email" class="flex-1 text-xs text-gray-400 uppercase") Email
-                            input(class="rounded text-base border-2 border-blue-50 p-2 flex-1" type="email" name="email" id="email"
-                                placeholder="Enter your email address")
-                        div(class="mt-4 flex flex-col")
-                            div(class="flex gap-2")
-                                div(class="flex-1") 
-                                    label(for="firstName" class="flex-1 text-xs text-gray-400 uppercase") First name
-                                    input(class="w-full rounded text-base border-2 border-blue-50 p-2 flex-1" type="text" name="firstName" id="firstName" placeholder="Your first name")
-                                div(class="flex-1")
-                                    label(for="lastName" class="flex-1 text-xs text-gray-400 uppercase") Last name
-                                    input(class="w-full rounded text-base border-2 border-blue-50 p-2 flex-1" type="text" name="lastName" id="lastName" placeholder="Your last name")
-                        div(class="mt-4 flex flex-col")
-                            label(for="password" class="flex-1 text-xs text-gray-400 uppercase") Password
-                            input(class="rounded text-base border-2 border-blue-50 p-2 flex-1" type="password" name="password" id="password" placeholder="New password")
-                        div(class="mt-4 flex flex-col")
-                            label(for="confirmPassword" class="flex-1 text-xs text-gray-400 uppercase") Password
-                            input(class="rounded text-base border-2 border-blue-50 p-2 flex-1" type="password" name="confirmPassword" id="confirmPassword" placeholder="New password again")
-                        .mt-4.flex 
-                            button(type="submit"
-                                class="border-2 border-blue-200 bg-blue-100 shadow rounded px-4 p-2 hover:bg-orange-100 hover:border-orange-200 flex-1") Continue
-                        div(class="mt-4 flex flex-col text-sm gap-2 text-gray-500")
-                            a(class="w-fit hover:underline mx-auto" href="/login") Already have an account? Login
-                block social
-                    hr(class="my-4 border-dotted border-2")
-                    div(class="mt-4 flex flex-col gap-2")
-                        button(type="submit"
-                                class="border-2 border-gray-200 bg-gray-100 shadow rounded p-2 hover:bg-orange-100 hover:border-orange-200 flex-1") 
-                                div(class="flex justify-center items-center gap-2")
-                                    img(alt="facebook login" src="/images/g-logo.png" class="h-6")
-                                    span Login with Google
-                        button(type="submit"
-                                class="border-2 border-gray-200 bg-gray-100 shadow rounded p-2 hover:bg-orange-100 hover:border-orange-200 flex-1")
-                                div(class="flex justify-center items-center gap-2")
-                                    img(alt="facebook login" src="/images/f-logo.png" class="h-6")
-                                    span Login with Facebook
+    div(class="max-w-xs lg:max-w-lg mx-auto max-h-screen flex flex-col justify-start pt-16")
+        div(class="flex flex-col")
+            div(class="justify-center flex")
+                img(alt="aarya logo" src="/images/aarya-logo.svg" class="h-32 mb-8 p-4 border-1 border-gray-200 rounded shadow")
+            block form
+                
+            block social
+                hr(class="my-4 border-dotted border-2")
+                div(class="mt-4 flex flex-col gap-2")
+                    +image_button("g-login", "login with google", "/images/g-logo.png", "Login with Google")
+                    +image_button("f-login", "login with facebook", "/images/f-logo.png", "Login with Facebook")
 
