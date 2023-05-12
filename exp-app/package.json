@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "tw-watch": "npx tailwindcss -i ./public/stylesheets/tw-input.css -o ./public/stylesheets/tw-output.css --watch",
-    "start": "nodemon -e js,css,pug ./bin/www"
+    "dev": "nodemon -e js,css,pug ./bin/www",
+    "prod": "export NODE_ENV=production && pm2 start ./bin/www"
   },
   "dependencies": {
     "express": "4.18.2",
