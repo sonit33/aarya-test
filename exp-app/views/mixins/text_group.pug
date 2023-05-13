@@ -1,0 +1,5 @@
+mixin text_group(type, name, label, placeholder)
+    div(class="mt-4 flex flex-col")
+        label(for=name class="flex-1 text-xs text-gray-400 uppercase")= label
+        input(class="rounded text-base border-2 border-blue-50 p-2 flex-1" type=type name=name id=name
+            placeholder=placeholder)
