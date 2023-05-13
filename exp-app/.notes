@@ -5,3 +5,4 @@ See if nginx is running `sudo systemctl status nginx`
 Start if not `sudo systemctl start nginx`
 The app is git cloned at ~
 `git pull https://github.com/sonit33/aarya-test.git` if you want to update followed by `npm install`
+After update, restart pm2 `pm2 restart www`
