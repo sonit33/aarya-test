@@ -1,5 +1,5 @@
-mixin image_button(button_id, image_alt, image_src, button_text)
-    button(type="submit" id=button_id
+mixin image_button(button_id, image_alt, image_src, button_text, href)
+    a(type="submit" id=button_id href=href
         class="border-2 border-gray-200 bg-gray-100 shadow rounded p-2 hover:bg-orange-100 hover:border-orange-200 flex-1") 
         div(class="flex justify-center items-center gap-2")
             img(alt=image_alt src=image_src class="h-6")

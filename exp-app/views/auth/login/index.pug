@@ -3,11 +3,15 @@ include ../../mixins/icon_button
 include ../../mixins/text_group
 include ../../mixins/h_1
 
+block page-scripts 
+    script(src="/javascripts/login.js")
+
 block form
     form(id="login-form")
         +h_1("Login to your Account")
         +text_group("email", "email", "Email", "Enter your email address")
         +text_group("password", "password", "Password", "Enter your password")
+        include ../../partials/input_csrf
         .mt-4.flex 
             +icon_button("login-button", "login", "Login")
         div(class="mt-4 flex flex-col text-sm gap-2 text-gray-500")

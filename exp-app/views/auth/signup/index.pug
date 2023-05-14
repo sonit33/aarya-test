@@ -4,6 +4,9 @@ include ../../mixins/text_group
 include ../../mixins/text_group_split
 include ../../mixins/h_1
 
+block page-scripts 
+    script(src="/javascripts/signup.js")
+
 block form
     form(id="login-form")
         +h_1("Create a New Account")
@@ -11,6 +14,7 @@ block form
         +text_group_split
         +text_group("password", "password", "Password", "New password")
         +text_group("password", "confirmPassword", "Confirm Password", "New password again")
+        include ../../partials/input_csrf
         .mt-4.flex 
             +icon_button("continue-button", "arrow_forward", "Continue")
         div(class="mt-4 flex flex-col text-sm gap-2 text-gray-500")

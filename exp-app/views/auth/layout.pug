@@ -2,7 +2,7 @@ extends ../layout.pug
 include ../mixins/image_button
 
 block content 
-    div(class="max-w-xs lg:max-w-lg mx-auto min-h-screen flex flex-col justify-start mt-8 mb-6")
+    div(class="max-w-xs lg:max-w-lg mx-auto flex flex-col justify-start my-8")
         div(class="flex flex-col")
             div(class="justify-center flex")
                 img(alt="aarya logo" src="/images/aarya-logo.svg" class="h-32 mb-8 p-4 border-1 border-gray-200 rounded shadow")
@@ -11,6 +11,6 @@ block content
             block social
                 hr(class="my-4 border-dotted border-2")
                 div(class="mt-4 flex flex-col gap-2")
-                    +image_button("g-login", "login with google", "/images/g-logo.png", "Login with Google")
-                    +image_button("f-login", "login with facebook", "/images/f-logo.png", "Login with Facebook")
+                    +image_button("g-login", "login with google", "/images/g-logo.png", "Login with Google", "/login/google")
+                    +image_button("f-login", "login with facebook", "/images/f-logo.png", "Login with Facebook", "/login/facebook")
 
