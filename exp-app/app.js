@@ -6,39 +6,46 @@ var bodyParser = require("body-parser");
 var session = require("express-session");
 var csrf = require("csurf");
 var passport = require("passport");
-var logger = require("morgan");
 require("dotenv").config();
-var rfs = require("rotating-file-stream");
 
-var SQLiteStore = require("connect-sqlite3")(session);
+const mongoose = require("mongoose");
+(async function () {
+  try {
+    await mongoose.connect(process.env.MONGO_APP, {
+      autoIndex: true,
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+      family: 4,
+    });
+    console.log(`mongo connected to ${process.env.MONGO_APP}`);
+  } catch (e) {
+    console.error(`failed to connect mongo to ${process.env.MONGO_APP}`);
+  }
+})();
+
+const MongoStore = require("connect-mongo");
 
 // view engine setup
 app.set("views", "./views");
 app.set("view engine", "pug");
 
-var accessLogStream = rfs.createStream("access.log", {
-  interval: "1d", // rotate daily
-  path: "./var/logs",
-});
-
-app.use(logger("combined", { stream: accessLogStream }));
 app.use(express.json());
 app.use(cookieParser());
-// parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
-// parse application/json
 app.use(bodyParser.json());
 app.use(csrf({ cookie: true }));
 app.use(express.static("./public"));
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
-    resave: false, // don't save session if unmodified
-    saveUninitialized: false, // don't create session until something stored
-    store: new SQLiteStore({ db: "sessions.db", dir: "./var/db" }),
+    resave: true, // don't save session if unmodified
+    saveUninitialized: true, // don't create session until something stored
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_SESSION }),
   })
 );
-app.use(passport.authenticate("session"));
+// app.use(passport.authenticate("session"));
+app.use(passport.session());
 app.use(function (req, res, next) {
   var msgs = req.session.messages || [];
   res.locals.messages = msgs;
@@ -62,12 +69,12 @@ app.use(function (err, req, res, next) {
 
 // set routes
 var indexRouter = require("./routes/index");
-var authRouter = require("./routes/auth");
+var emailAuthRouter = require("./routes/email-auth");
 var googleAuthRouter = require("./routes/google-auth");
 // var facebookAuthRouter = require("./routes/facebook-auth");
 
 app.use("/", indexRouter);
-app.use("/", authRouter);
+app.use("/", emailAuthRouter);
 app.use("/", googleAuthRouter);
 // app.use("/", facebookAuthRouter);
 

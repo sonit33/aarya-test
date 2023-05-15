@@ -1,7 +1,7 @@
 var express = require("express");
 var passport = require("passport");
 var GoogleStrategy = require("passport-google-oauth2").Strategy;
-var db = require("../lib/db");
+var db = require("../lib/schema/user-schema");
 
 passport.use(
   new GoogleStrategy(

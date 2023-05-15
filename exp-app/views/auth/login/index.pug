@@ -4,10 +4,11 @@ include ../../mixins/text_group
 include ../../mixins/h_1
 
 block page-scripts 
-    script(src="/javascripts/login.js")
+    //- script(src="/javascripts/login.js")
 
 block form
-    form(id="login-form")
+    p= message
+    form(id="login-form" action="/login" method="POST")
         +h_1("Login to your Account")
         +text_group("email", "email", "Email", "Enter your email address")
         +text_group("password", "password", "Password", "Enter your password")
