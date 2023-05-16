@@ -6,7 +6,7 @@
     "tw-watch": "npx tailwindcss -i ./public/stylesheets/tw-input.css -o ./public/stylesheets/tw-output.css --watch",
     "dev": "nodemon -e js,css,pug ./bin/www",
     "prod": "export NODE_ENV=production && pm2 reload ./bin/www",
-    "test": "jest --coverage"
+    "test": "jest"
   },
   "dependencies": {
     "body-parser": "1.20.2",
