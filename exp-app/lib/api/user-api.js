@@ -5,7 +5,7 @@ const pbkdf2Async = promisify(pbkdf2);
 
 module.exports = class User {
   makeSalt() {
-    return randomBytes(16);
+    return randomBytes(16).toString("hex");
   }
 
   makeSixDigitCode() {
@@ -13,14 +13,15 @@ module.exports = class User {
   }
 
   async makeHash(password, salt) {
-    return await pbkdf2Async(password, salt, 310000, 32, "sha256");
+    return (await pbkdf2Async(password, salt, 310000, 32, "sha256")).toString("hex");
   }
 
   verifyHash(source, target) {
-    return timingSafeEqual(source, target);
+    return timingSafeEqual(Buffer.from(source, "utf-8"), Buffer.from(target, "utf-8"));
   }
 
   async insert(firstName, lastName, email, passwordHash, salt) {
+    console.log(arguments);
     const user = new model({
       provider: "email",
       email: email,
@@ -31,7 +32,7 @@ module.exports = class User {
       verificationCode: this.makeSixDigitCode(),
     });
     await user.save();
-    return user._id;
+    return user._id.toString();
   }
 
   async insertWith(provider, firstName, lastName, displayName, email, photoUrl) {
@@ -43,16 +44,17 @@ module.exports = class User {
       displayName: displayName,
       photoUrl: photoUrl,
       isVerified: true,
+      verificationCode: this.makeSixDigitCode(),
     });
     await user.save();
-    return user._id;
+    return user._id.toString();
   }
 
   async create(firstName, lastName, email, password) {
     try {
       const salt = this.makeSalt();
-      const passwordHash = this.makeHash(password, salt);
-      const userId = this.insert(userId, firstName, lastName, email, passwordHash, salt);
+      const passwordHash = await this.makeHash(password, salt);
+      const userId = await this.insert(firstName, lastName, email, passwordHash, salt);
       return userId;
     } catch (e) {
       console.log(e);

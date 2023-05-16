@@ -8,20 +8,9 @@ var csrf = require("csurf");
 var passport = require("passport");
 require("dotenv").config();
 
-const mongoose = require("mongoose");
+const db = require("./lib/utils/mongoose-connect");
 (async function () {
-  try {
-    await mongoose.connect(process.env.MONGO_APP, {
-      autoIndex: true,
-      maxPoolSize: 10,
-      serverSelectionTimeoutMS: 5000,
-      socketTimeoutMS: 45000,
-      family: 4,
-    });
-    console.log(`mongo connected to ${process.env.MONGO_APP}`);
-  } catch (e) {
-    console.error(`failed to connect mongo to ${process.env.MONGO_APP}`);
-  }
+  await db(process.env.MONGO_APP);
 })();
 
 const MongoStore = require("connect-mongo");

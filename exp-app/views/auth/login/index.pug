@@ -2,14 +2,15 @@ extends ../layout.pug
 include ../../mixins/icon_button
 include ../../mixins/text_group
 include ../../mixins/h_1
+include ../../mixins/page_error
 
 block page-scripts 
-    //- script(src="/javascripts/login.js")
+    script(src="/javascripts/login.js")
 
 block form
-    p= message
     form(id="login-form" action="/login" method="POST")
         +h_1("Login to your Account")
+        +page_error(message)
         +text_group("email", "email", "Email", "Enter your email address")
         +text_group("password", "password", "Password", "Enter your password")
         include ../../partials/input_csrf

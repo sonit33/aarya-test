@@ -5,7 +5,8 @@
   "scripts": {
     "tw-watch": "npx tailwindcss -i ./public/stylesheets/tw-input.css -o ./public/stylesheets/tw-output.css --watch",
     "dev": "nodemon -e js,css,pug ./bin/www",
-    "prod": "export NODE_ENV=production && pm2 start ./bin/www"
+    "prod": "export NODE_ENV=production && pm2 reload ./bin/www",
+    "test": "jest --coverage"
   },
   "dependencies": {
     "body-parser": "1.20.2",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@prettier/plugin-pug": "2.5.0",
+    "jest": "29.5.0",
     "prettier": "2.8.8",
     "tailwindcss": "3.3.2"
   }
