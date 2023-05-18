@@ -8,9 +8,9 @@ var csrf = require("csurf");
 var passport = require("passport");
 require("dotenv").config();
 
-const db = require("./lib/utils/mongoose-connect");
+const { connect } = require("./lib/utils/mongoose-connect");
 (async function () {
-  await db(process.env.MONGO_APP);
+  await connect(process.env.MONGO_APP);
 })();
 
 const MongoStore = require("connect-mongo");

@@ -5,13 +5,22 @@ include ../../mixins/text_group_split
 include ../../mixins/h_1
 
 block page-scripts 
+    script(src="/javascripts/validator.js")
     script(src="/javascripts/signup.js")
 
 block form
-    form(id="login-form")
+    form(id="login-form" action="/signup" method="POST")
         +h_1("Create a New Account")
         +text_group("email", "email", "Email", "Enter your email address")
-        +text_group_split
+        +text_group_split([{
+            name:"firstName",
+            label:"First Name",
+            filler:"Your first or given name"
+        },{
+            name:"lastName",
+            label:"Last Name",
+            filler:"Your last or family name"
+        }])
         +text_group("password", "password", "Password", "New password")
         +text_group("password", "confirmPassword", "Confirm Password", "New password again")
         include ../../partials/input_csrf

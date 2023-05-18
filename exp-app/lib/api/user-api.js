@@ -60,7 +60,6 @@ module.exports = class User {
       const userId = await this.insert(firstName, lastName, email, passwordHash, salt);
       return userId;
     } catch (e) {
-      console.log(e.message);
       throw new Error("Create User Failed", e.message);
     }
   }
@@ -77,7 +76,6 @@ module.exports = class User {
       );
       return userId;
     } catch (e) {
-      console.log(e);
       throw new Error(`Create User with ${provider} failed`, e);
     }
   }
@@ -99,24 +97,27 @@ module.exports = class User {
 
   async verifyEmail(userId, code) {
     const user = await this.findById(userId);
-    if (!user.code == code)
-      throw new Error(`Email verification failed for ${userId} with code ${code}`);
+    if (user.verificationCode.trim() !== code.trim()) {
+      throw new Error(
+        `Email verification failed for ${userId} having code ${user.verificationCode} with code ${code}`
+      );
+    }
     await user.updateOne({ isVerified: true });
   }
 
   async generateNewCode(userId) {
     const user = await this.findById(userId);
     const code = this.makeSixDigitCode();
-    user.updateOne({ verificationCode: code });
+    await user.updateOne({ verificationCode: code, isVerified: false });
     return code;
   }
 
   async changePassword(userId, oldPassword, newPassword) {
     const user = await this.findById(userId);
-    const hash = await this.makeHashAsync(oldPassword, user.salt);
-    if (!this.verifyHash(hash, user.passwordHash))
+    if (!(await this.matchPassword(oldPassword, user.passwordHash, user.salt))) {
       throw new Error(`Old password is incorrect for user: ${userId}`);
-    await user.updateOne({ passwordHash: this.makeHashAsync(newPassword, user.salt) });
+    }
+    await user.updateOne({ passwordHash: await this.makeHashAsync(newPassword, user.salt) });
   }
 
   async resetPassword(userId, code, newPassword) {
@@ -127,11 +128,12 @@ module.exports = class User {
   }
 
   async matchPassword(password, passwordHash, salt) {
-    try {
-      const cookedHash = await this.makeHashAsync(password, salt);
-      return this.verifyHash(cookedHash, passwordHash);
-    } catch (e) {
-      throw new Error(`Failed to match passwords ${e.message}`);
-    }
+    const cookedHash = await this.makeHashAsync(password, salt);
+    return this.verifyHash(cookedHash, passwordHash);
+  }
+
+  async destruct(userId) {
+    const user = await this.findById(userId);
+    await user.deleteOne({ _id: userId });
   }
 };

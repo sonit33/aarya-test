@@ -2,8 +2,9 @@ var express = require("express");
 var router = express.Router();
 var passport = require("passport");
 var LocalStrategy = require("passport-local");
-const User = require("../lib/api/user-api");
-const user = new User();
+const Api = require("../lib/api/user-api");
+const api = new Api();
+const validatePasswordString = require("../lib/utils/password");
 
 // Configure password authentication strategy
 passport.use(
@@ -14,11 +15,10 @@ passport.use(
       session: true,
     },
     async function verify(email, password, done) {
-      const found = await user.findByEmail(email);
-      if (found) {
-        const cookedHash = await user.makeHash(password, found.salt);
-        if (user.verifyHash(cookedHash, found.passwordHash)) {
-          done(null, found);
+      const user = await api.findByEmail(email);
+      if (user) {
+        if (await api.matchPassword(password, user.passwordHash, user.salt)) {
+          done(user);
         } else {
           done(null, false, { message: "Incorrect password" });
         }
@@ -64,14 +64,11 @@ router.post("/login", function (req, res, next) {
     if (err) {
       return next(err);
     }
-    if (!user) {
-      return res.render("auth/login/index", {
-        title: "Aarya: Login",
-        csrfToken: req.csrfToken(),
-        message: info.message,
-      });
+    if (info.message) {
+      res.status(400).send({ message: info.message });
+    } else {
+      res.status(200).send(user);
     }
-    res.redirect("/");
   })(req, res, next);
 });
 
@@ -87,7 +84,10 @@ router.post("/logout", function (req, res, next) {
 // signup
 router.post("/signup", async function (req, res) {
   const { firstName, lastName, email, password } = req.body;
-  console.log(firstName, lastName);
+  const validationErrors = validatePasswordString(password);
+  if (validationErrors.length > 0) {
+    return res.status(400).send({ errors: validationErrors });
+  }
   const userId = await user.create(firstName, lastName, email, password);
   res.send({ userId: userId });
 });
