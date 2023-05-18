@@ -57,13 +57,13 @@ $(document).ready(function () {
           evaluate: (t) => {
             return /^[a-zA-Z\s\.]+$/.test(t);
           },
-          warning: "Letters, spaces, dashes, and dots",
+          warning: "Letters only",
         },
         {
           evaluate: (t) => {
             return t.length > 2;
           },
-          warning: "Too short",
+          warning: "Needs at least two letters",
         },
         {
           evaluate: (t) => {
@@ -81,13 +81,13 @@ $(document).ready(function () {
           evaluate: (t) => {
             return /^[a-zA-Z\s\.]+$/.test(t);
           },
-          warning: "Letters, spaces, dashes, and dots",
+          warning: "Letters only",
         },
         {
           evaluate: (t) => {
             return t.length > 2;
           },
-          warning: "Too short",
+          warning: "Needs at least two letters",
         },
         {
           evaluate: (t) => {
@@ -105,13 +105,25 @@ $(document).ready(function () {
           evaluate: (t) => {
             return t.length > 6;
           },
-          warning: "Too short",
+          warning: "Needs at least six digits and letters",
         },
         {
           evaluate: (t) => {
-            return t.length < 20;
+            return t.length < 25;
           },
           warning: "Too long",
+        },
+        {
+          evaluate: (t) => {
+            return /.*\d/.test(t);
+          },
+          warning: "Needs at least one digit",
+        },
+        {
+          evaluate: (t) => {
+            return /.*[a-zA-Z]/.test(t);
+          },
+          warning: "Needs at least one letter",
         },
       ],
     },
@@ -123,13 +135,31 @@ $(document).ready(function () {
           evaluate: (t) => {
             return t.length > 6;
           },
-          warning: "Too short",
+          warning: "Needs at least six digits and letters",
         },
         {
           evaluate: (t) => {
-            return t.length < 20;
+            return t.length < 25;
           },
           warning: "Too long",
+        },
+        {
+          evaluate: (t) => {
+            return /.*\d/.test(t);
+          },
+          warning: "Needs at least one digit",
+        },
+        {
+          evaluate: (t) => {
+            return /.*[a-zA-Z]/.test(t);
+          },
+          warning: "Needs at least one letter",
+        },
+        {
+          evaluate: (t) => {
+            return t == $("#password").val();
+          },
+          warning: "The two passwords must match",
         },
       ],
     },

@@ -1,11 +1,11 @@
 var passwordValidDefinition = [
   {
     minLength: 6,
-    ErrorMessage: "Your password must be at least six characters long.",
+    ErrorMessage: "Your password needs at least six digits and letters",
   },
   {
-    maxLength: 50,
-    ErrorMessage: "Your password cannot be longer than 50 characters.",
+    maxLength: 25,
+    ErrorMessage: "Your password cannot be longer than 25 characters.",
   },
   {
     regex: /.*\d/,
@@ -14,11 +14,6 @@ var passwordValidDefinition = [
   {
     regex: /.*[a-zA-Z]/,
     ErrorMessage: "Your password must contain at least one letter.",
-  },
-  {
-    regex: /.*[!@#$%^&*() =+_-]/,
-    ErrorMessage:
-      "Your password must contain at least one symbol in this list !@#$%^&*()=+_- or a space.",
   },
 ];
 
