@@ -4,11 +4,20 @@ $(document).ready(function () {
   $("#login-form").submit(async function (e) {
     e.preventDefault();
     const formData = $(e.target).serializeArray();
-    console.log(formData);
     if (await formValidator(validators)) {
       $.post("/signup", formData)
         .done(function (data) {
-          console.log(data);
+          console.log("after signup: ", data);
+          const { userId, newUser, isVerified } = data;
+          if (newUser && !isVerified) {
+            location.href = `/verification/${userId}`;
+          } else if (!newUser && !isVerified) {
+            location.href = `/verification/${userId}`;
+          } else if (!newUser && isVerified) {
+            console.log("login page");
+          } else {
+            console.log("login page");
+          }
         })
         .fail(function (err) {
           console.log(err);

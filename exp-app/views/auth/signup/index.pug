@@ -9,7 +9,7 @@ block page-scripts
     script(src="/javascripts/signup.js")
 
 block form
-    form(id="login-form" action="/signup" method="POST")
+    form(id="login-form")
         +h_1("Create a New Account")
         +text_group("email", "email", "Email", "Enter your email address")
         +text_group_split([{

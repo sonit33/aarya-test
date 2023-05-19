@@ -2,5 +2,6 @@ mixin icon_button(button_id, icon_label, button_text)
     button(type="submit" id=button_id
         class="border-2 border-blue-200 bg-blue-100 shadow rounded px-4 p-2 hover:bg-orange-100 hover:border-orange-200 flex-1") 
             p(class="flex justify-center gap-2")
+                small(class="material-symbols-outlined") #{icon_label}
                 span #{button_text}
-                span(class="material-symbols-outlined") #{icon_label}
+                

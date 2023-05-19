@@ -58,6 +58,17 @@ router.get("/signup", async function (req, res) {
   res.render("auth/signup/index", { title: "Aarya: Signup", csrfToken: req.csrfToken() });
 });
 
+router.get("/verification/:userId", async function (req, res) {
+  console.log(req.params.userId);
+  const user = await api.findById(req.params.userId);
+  console.log(user);
+  res.render("auth/signup/verification", {
+    title: "Aarya: Email verification",
+    email: user.email,
+    csrfToken: req.csrfToken(),
+  });
+});
+
 // POSTs
 router.post("/login", function (req, res, next) {
   passport.authenticate("local", function (err, user, info, status) {
@@ -86,10 +97,27 @@ router.post("/signup", async function (req, res) {
   const { firstName, lastName, email, password } = req.body;
   const validationErrors = validatePasswordString(password);
   if (validationErrors.length > 0) {
-    return res.status(400).send({ errors: validationErrors });
+    return res.status(400).send({ message: "Invalid password" });
   }
-  const userId = await user.create(firstName, lastName, email, password);
-  res.send({ userId: userId });
+  try {
+    const user = await api.findByEmail(email);
+    let userId = "",
+      isVerified = false,
+      newUser = false;
+    if (user) {
+      userId = user._id.toString();
+      isVerified = user.isVerified;
+      console.log(`Attempt to use an existing email: ${email} having an Id: ${userId}`);
+    } else {
+      userId = await api.create(firstName, lastName, email, password);
+      newUser = true;
+      console.log(`New user created with Id: ${userId}`);
+    }
+    res.send({ userId: userId, newUser: newUser, isVerified: isVerified });
+  } catch (e) {
+    console.log(`Failed to created a new user: ${e.message}`);
+    res.status(400).send({ message: e.message });
+  }
 });
 
 module.exports = router;
