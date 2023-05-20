@@ -6,7 +6,15 @@ module.exports = {
       hubot: "Hubot Sans",
       mona: "Mona Sans",
     },
-    extend: {},
+    extend: {
+      colors: {
+        "fb-blue": "#445793",
+        info: "",
+        warning: "",
+        success: "",
+        danger: "",
+      },
+    },
   },
   plugins: [],
 };

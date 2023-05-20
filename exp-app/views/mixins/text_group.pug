@@ -1,6 +1,6 @@
-mixin text_group(type, name, label, placeholder, isDisabled, value)
+mixin text_group(type, name, label, placeholder)
     div(class="mt-4 flex flex-col")
         label(for=name class="flex-1 text-xs text-gray-400 uppercase")= label
-        input(class="rounded text-base border-2 border-blue-50 p-2 flex-1" disabled=isDisabled type=type name=name id=name
-            placeholder=placeholder value=value)
+        input(class="rounded text-base border-2 border-blue-50 p-2 flex-1" type=type name=name id=name
+            placeholder=placeholder)
         p(class="p-1 my-1 rounded border border-orange-100 bg-orange-50 text-sm" style="display:none" id=`${name}-warning`)

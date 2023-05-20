@@ -20,10 +20,10 @@ passport.use(
         if (await api.matchPassword(password, user.passwordHash, user.salt)) {
           done(user);
         } else {
-          done(null, false, { message: "Incorrect password" });
+          done(null, false, { data: "Incorrect password" });
         }
       } else {
-        done(null, false, { message: "Incorrect username" });
+        done(null, false, { data: "Incorrect username" });
       }
     }
   )
@@ -59,12 +59,13 @@ router.get("/signup", async function (req, res) {
 });
 
 router.get("/verification/:userId", async function (req, res) {
-  console.log(req.params.userId);
   const user = await api.findById(req.params.userId);
-  console.log(user);
+  // render a verified page if already verified
+  // otherwise render the verification page
   res.render("auth/signup/verification", {
     title: "Aarya: Email verification",
     email: user.email,
+    userId: req.params.userId,
     csrfToken: req.csrfToken(),
   });
 });
@@ -78,7 +79,7 @@ router.post("/login", function (req, res, next) {
     if (info.message) {
       res.status(400).send({ message: info.message });
     } else {
-      res.status(200).send(user);
+      res.send(user);
     }
   })(req, res, next);
 });
@@ -118,6 +119,18 @@ router.post("/signup", async function (req, res) {
     console.log(`Failed to created a new user: ${e.message}`);
     res.status(400).send({ message: e.message });
   }
+});
+
+router.post("/verification", async function (req, res) {
+  try {
+    console.log(req.body);
+    const { code, userId } = req.body;
+    await api.verifyEmail(userId, code);
+  } catch (e) {
+    console.log(e.message);
+    return res.status(400).send({ message: e.message });
+  }
+  res.send({ message: "Email validated", next: "/login" });
 });
 
 module.exports = router;

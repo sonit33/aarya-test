@@ -1,29 +1,22 @@
 extends ../layout.pug
 include ../../mixins/icon_button
 include ../../mixins/text_group
-include ../../mixins/text_group_split
 include ../../mixins/h_1
+include ../../mixins/csrf_hidden
 
 block page-scripts 
-    script(src="/javascripts/validator.js")
-    script(src="/javascripts/signup.js")
+    script(src="/js/validator.js")
+    script(src="/js/signup.js")
 
 block form
-    form(id="login-form")
+    form(id="signup-form")
         +h_1("Create a New Account")
         +text_group("email", "email", "Email", "Enter your email address")
-        +text_group_split([{
-            name:"firstName",
-            label:"First Name",
-            filler:"Your first or given name"
-        },{
-            name:"lastName",
-            label:"Last Name",
-            filler:"Your last or family name"
-        }])
+        +text_group("text", "firstName", "First Name", "Your first or given name")
+        +text_group("text", "lastName", "Last Name", "Your last or family name")
         +text_group("password", "password", "Password", "New password")
         +text_group("password", "confirmPassword", "Confirm Password", "New password again")
-        include ../../partials/input_csrf
+        +csrf_hidden(csrfToken)
         .mt-4.flex 
             +icon_button("continue-button", "arrow_forward", "Continue")
         div(class="mt-4 flex flex-col text-sm gap-2 text-gray-500")

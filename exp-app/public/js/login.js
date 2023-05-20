@@ -1,7 +1,7 @@
-$(document).ready(function () {
+$(function () {
   console.log("page loaded");
 
-  $("#login-form").submit(function (e) {
+  $("#login-form").on("submit", function (e) {
     e.preventDefault();
     const formData = $(e.target).serializeArray();
     $.post("/login", formData)

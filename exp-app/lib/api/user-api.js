@@ -98,9 +98,7 @@ module.exports = class User {
   async verifyEmail(userId, code) {
     const user = await this.findById(userId);
     if (user.verificationCode.trim() !== code.trim()) {
-      throw new Error(
-        `Email verification failed for ${userId} having code ${user.verificationCode} with code ${code}`
-      );
+      throw new Error(`Email verification failed for ${userId} with code ${code}`);
     }
     await user.updateOne({ isVerified: true });
   }

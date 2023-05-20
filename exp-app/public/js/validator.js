@@ -9,6 +9,16 @@ async function formValidator(validators) {
   return invalidCounter == 0;
 }
 
+function applyKeyups(validators) {
+  const keys = Object.keys(validators);
+  for (let i = 0; i < keys.length; i++) {
+    const v = validators[keys[i]];
+    $(v.valueSelector).on("keyup", async function () {
+      await fieldValidator(validators[v.valueSelector.substring(1, v.valueSelector.length)]);
+    });
+  }
+}
+
 async function fieldValidator(validator) {
   return new Promise((resolve) => {
     const warn = $(validator.warningSelector);
