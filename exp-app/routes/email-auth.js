@@ -18,12 +18,12 @@ passport.use(
       const user = await api.findByEmail(email);
       if (user) {
         if (await api.matchPassword(password, user.passwordHash, user.salt)) {
-          done(user);
+          return done(null, { userId: user._id.toString() });
         } else {
-          done(null, false, { data: "Incorrect password" });
+          return done(null, false, { message: "Incorrect password" });
         }
       } else {
-        done(null, false, { data: "Incorrect username" });
+        return done(null, false, { message: "Incorrect username" });
       }
     }
   )
@@ -31,11 +31,13 @@ passport.use(
 
 // Configure session management
 passport.serializeUser(function (user, done) {
-  done(null, user);
+  console.log("serializeUser", user);
+  done(null, user.userId);
 });
 
-passport.deserializeUser(function (user, done) {
-  done(null, user);
+passport.deserializeUser(async function (id, done) {
+  console.log("deserializeUser", id);
+  done(null, await api.findById(id));
 });
 
 // GETs
@@ -73,13 +75,14 @@ router.get("/verification/:userId", async function (req, res) {
 // POSTs
 router.post("/login", function (req, res, next) {
   passport.authenticate("local", function (err, user, info, status) {
+    // console.log("79: ", err, user, info);
     if (err) {
       return next(err);
     }
-    if (info.message) {
-      res.status(400).send({ message: info.message });
+    if (info && info.message) {
+      return res.status(400).send({ message: info.message });
     } else {
-      res.send(user);
+      return res.send({ userId: user.userId, next: "/" });
     }
   })(req, res, next);
 });
@@ -134,5 +137,3 @@ router.post("/verification", async function (req, res) {
 });
 
 module.exports = router;
-
-// ref: https://github.com/passport/todos-express-password/blob/master/routes/auth.js

@@ -1,5 +1,5 @@
 mixin alert_info(title, sub)
-    div(id="alert" class="alert bg-blue-100 my-8 rounded-b text-blue-900 px-4 py-3 shadow-md" role="alert")
+    div(id="alert" class=`alert bg-blue-100 my-8 rounded-b text-blue-900 px-4 py-3 shadow-md ${title && title.length > 0 ? "":"hidden"}` role="alert")
         div
             p(class="title font-bold")= title
             p(class="sub text-sm")= sub

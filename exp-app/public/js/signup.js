@@ -26,18 +26,7 @@ $(function () {
   });
 
   const validators = {
-    email: {
-      valueSelector: "#email",
-      warningSelector: "#email-warning",
-      conditions: [
-        {
-          evaluate: (v) => {
-            return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
-          },
-          warning: "Use standard email format e.g. abc@xyz.com",
-        },
-      ],
-    },
+    email: sharedValidators.email,
     firstName: {
       valueSelector: "#firstName",
       warningSelector: "#firstName-warning",
@@ -86,36 +75,7 @@ $(function () {
         },
       ],
     },
-    password: {
-      valueSelector: "#password",
-      warningSelector: "#password-warning",
-      conditions: [
-        {
-          evaluate: (t) => {
-            return t.length > 6;
-          },
-          warning: "Needs at least six digits and letters",
-        },
-        {
-          evaluate: (t) => {
-            return t.length < 25;
-          },
-          warning: "Too long",
-        },
-        {
-          evaluate: (t) => {
-            return /.*\d/.test(t);
-          },
-          warning: "Needs at least one digit",
-        },
-        {
-          evaluate: (t) => {
-            return /.*[a-zA-Z]/.test(t);
-          },
-          warning: "Needs at least one letter",
-        },
-      ],
-    },
+    password: sharedValidators.password,
     confirmPassword: {
       valueSelector: "#confirmPassword",
       warningSelector: "#confirmPassword-warning",

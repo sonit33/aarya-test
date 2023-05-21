@@ -13,6 +13,7 @@ passport.use(
     },
     function (request, accessToken, refreshToken, profile, done) {
       console.log(profile);
+      // create a new profile user
       return done();
     }
   )

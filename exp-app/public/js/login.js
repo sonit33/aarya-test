@@ -1,15 +1,24 @@
 $(function () {
   console.log("page loaded");
 
-  $("#login-form").on("submit", function (e) {
+  $("#login-form").on("submit", async function (e) {
     e.preventDefault();
     const formData = $(e.target).serializeArray();
-    $.post("/login", formData)
-      .done(function (data) {
-        console.log("after login: ", data);
-      })
-      .fail(function (err) {
-        console.log(err);
-      });
+    if (await formValidator(validators)) {
+      $.post("/login", formData)
+        .done(function (data) {
+          location.href = data.next;
+        })
+        .fail(async function (err) {
+          await alert_error("Login failed", err.responseJSON.message);
+        });
+    }
   });
+
+  const validators = {
+    email: sharedValidators.email,
+    password: sharedValidators.password,
+  };
+
+  applyKeyups(validators);
 });

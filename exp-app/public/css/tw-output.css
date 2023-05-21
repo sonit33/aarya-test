@@ -582,6 +582,14 @@ html {
   height: 1.5rem;
 }
 
+.h-12 {
+  height: 3rem;
+}
+
+.h-8 {
+  height: 2rem;
+}
+
 .w-fit {
   width: -moz-fit-content;
   width: fit-content;
@@ -913,7 +921,17 @@ html {
 }
 
 @media (min-width: 1024px) {
+  .lg\:h-8 {
+    height: 2rem;
+  }
+
   .lg\:max-w-sm {
     max-width: 24rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .xl\:h-10 {
+    height: 2.5rem;
   }
 }

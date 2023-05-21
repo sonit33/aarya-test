@@ -26,6 +26,10 @@ async function alert_error(title, sub) {
   );
 }
 
+async function alert_hide() {
+  await alert_template(null, null, "alert hidden");
+}
+
 async function alert_template(title, sub, style) {
   return new Promise((resolve) => {
     $("#alert").removeAttr("class");
