@@ -1,6 +1,4 @@
 $(function () {
-  console.log("page loaded");
-
   $("#login-form").on("submit", async function (e) {
     e.preventDefault();
     const formData = $(e.target).serializeArray();

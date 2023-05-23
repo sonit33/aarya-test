@@ -1,44 +1,10 @@
 var express = require("express");
 var router = express.Router();
-var passport = require("passport");
-var LocalStrategy = require("passport-local");
 const Api = require("../lib/api/user-api");
 const api = new Api();
 const validatePasswordString = require("../lib/utils/password");
-
-// Configure password authentication strategy
-passport.use(
-  new LocalStrategy(
-    {
-      usernameField: "email",
-      passwordField: "password",
-      session: true,
-    },
-    async function verify(email, password, done) {
-      const user = await api.findByEmail(email);
-      if (user) {
-        if (await api.matchPassword(password, user.passwordHash, user.salt)) {
-          return done(null, { userId: user._id.toString() });
-        } else {
-          return done(null, false, { message: "Incorrect password" });
-        }
-      } else {
-        return done(null, false, { message: "Incorrect username" });
-      }
-    }
-  )
-);
-
-// Configure session management
-passport.serializeUser(function (user, done) {
-  console.log("serializeUser", user);
-  done(null, user.userId);
-});
-
-passport.deserializeUser(async function (id, done) {
-  console.log("deserializeUser", id);
-  done(null, await api.findById(id));
-});
+const jwt = require("jsonwebtoken");
+const TOKEN_NAME = "emailIdToken";
 
 // GETs
 router.get("/forgot-password", function (req, res) {
@@ -52,7 +18,6 @@ router.get("/login", function (req, res) {
   res.render("auth/login/index", {
     title: "Aarya: Login",
     csrfToken: req.csrfToken(),
-    messages: req.session.messages,
   });
 });
 
@@ -72,28 +37,33 @@ router.get("/verification/:userId", async function (req, res) {
   });
 });
 
-// POSTs
-router.post("/login", function (req, res, next) {
-  passport.authenticate("local", function (err, user, info, status) {
-    // console.log("79: ", err, user, info);
-    if (err) {
-      return next(err);
-    }
-    if (info && info.message) {
-      return res.status(400).send({ message: info.message });
-    } else {
-      return res.send({ userId: user.userId, next: "/" });
-    }
-  })(req, res, next);
+router.get("/logout", function (req, res, next) {
+  res.clearCookie(TOKEN_NAME);
+  res.send("You are logged out");
 });
 
-router.post("/logout", function (req, res, next) {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
+// POSTs
+router.post("/login", async function (req, res) {
+  const { email, password } = req.body;
+  const user = await api.findByEmail(email);
+  if (user) {
+    if (await api.matchPassword(password, user.passwordHash, user.salt)) {
+      try {
+        const token = await jwt.sign({ userId: user._id.toString() }, process.env.JWT_SECRET);
+        res.cookie(TOKEN_NAME, token, {
+          httpOnly: true,
+          secure: process.env.HTTPS_ENABLED == "true" ? true : false,
+        });
+        res.status(200).json({ next: "/" });
+      } catch (e) {
+        res.status(500).send(e.message);
+      }
+    } else {
+      res.status(400).send({ message: "Incorrect password" });
     }
-    res.redirect("/");
-  });
+  } else {
+    res.status(400).send({ message: "Incorrect username" });
+  }
 });
 
 // signup
@@ -105,7 +75,7 @@ router.post("/signup", async function (req, res) {
   }
   try {
     const user = await api.findByEmail(email);
-    let userId = "",
+    let userId = null,
       isVerified = false,
       newUser = false;
     if (user) {

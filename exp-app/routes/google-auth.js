@@ -1,57 +1,43 @@
 var express = require("express");
-var passport = require("passport");
-var GoogleStrategy = require("passport-google-oauth2").Strategy;
-var db = require("../lib/schema/user-schema");
-
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:3001/callback/google",
-      passReqToCallback: true,
-    },
-    function (request, accessToken, refreshToken, profile, done) {
-      console.log(profile);
-      // create a new profile user
-      return done();
-    }
-  )
-);
-
-passport.serializeUser(function (user, cb) {
-  process.nextTick(function () {
-    console.log("serializeUser:", user);
-    cb(null, { id: user.id, username: user.username, name: user.name });
-  });
-});
-
-passport.deserializeUser(function (user, cb) {
-  console.log("deserializeUser:", user);
-  process.nextTick(function () {
-    return cb(null, user);
-  });
-});
-
 var router = express.Router();
-
-router.get("/login/google", passport.authenticate("google", { scope: ["email", "profile"] }));
-
-router.get(
-  "/callback/google",
-  passport.authenticate("google", {
-    successRedirect: "/",
-    failureRedirect: "/login",
-  })
+const jwt = require("jsonwebtoken");
+const { OAuth2Client } = require("google-auth-library");
+const client = new OAuth2Client(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  "http://localhost:3001/auth/google/callback"
 );
+const TOKEN_NAME = "googleIdToken";
 
-router.post("/logout/google", function (req, res, next) {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
-    }
-    res.redirect("/");
+router.get("/logout", function (req, res) {
+  res.clearCookie(TOKEN_NAME);
+  res.send("You are logged out");
+});
+
+router.get("/login", async function (req, res) {
+  const authorizeUrl = client.generateAuthUrl({
+    scope: ["profile", "email"],
   });
+  res.redirect(authorizeUrl);
+});
+
+router.get("/callback", async function (req, res) {
+  const code = req.query.code;
+
+  try {
+    const { tokens } = await client.getToken(code);
+    const { id_token } = tokens;
+    const decodedToken = jwt.decode(id_token);
+    console.log(decodedToken);
+    res.cookie(TOKEN_NAME, id_token, {
+      httpOnly: true,
+      secure: process.env.HTTPS_ENABLED == "true" ? true : false,
+    });
+    res.redirect("/");
+  } catch (error) {
+    console.error("Google OAuth failed:", error);
+    res.redirect("/login");
+  }
 });
 
 module.exports = router;
