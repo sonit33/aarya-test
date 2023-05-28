@@ -39,6 +39,12 @@ app.use((err, req, res, next) => {
   res.send("Invalid CSRF token");
 });
 
+app.use(function (req, res, next) {
+  const requestedWithHeader = req.headers["x-requested-with"];
+  req.isXMLHttpRequest = requestedWithHeader === "XMLHttpRequest";
+  next();
+});
+
 // set routes
 var indexRouter = require("./routes/index");
 var emailAuthRouter = require("./routes/email-auth");

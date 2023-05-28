@@ -15,9 +15,11 @@ module.exports = async function (req, res, next) {
       req.body.idToken = jwt.decode(googleIdToken);
       return next();
     } catch (e) {
-      console.log("Google ID token verification failed: ", e.message);
-      // return res.status(401).send({ message: "login again" });
-      throw new Error("401");
+      if (req.isXMLHttpRequest) {
+        return res.status(401).send({ message: "login again" });
+      } else {
+        return res.redirect("/login");
+      }
     }
   } else if (emailIdToken) {
     try {
@@ -25,13 +27,17 @@ module.exports = async function (req, res, next) {
       req.body.idToken = jwt.decode(emailIdToken);
       return next();
     } catch (err) {
-      console.log(err.message);
-      // return res.status(401).send({ message: "login again" });
-      throw new Error("401");
+      if (req.isXMLHttpRequest) {
+        return res.status(401).send({ message: "login again" });
+      } else {
+        return res.redirect("/login");
+      }
     }
   } else {
-    console.log("missing ID tokens");
-    // return res.status(400).send({ message: "missing tokens" });
-    throw new Error("400");
+    if (req.isXMLHttpRequest) {
+      return res.status(400).send({ message: "missing tokens" });
+    } else {
+      return res.redirect("/login");
+    }
   }
 };
