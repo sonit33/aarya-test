@@ -84,6 +84,32 @@ describe("user creation tests", function () {
     const x = () => api.create("x", "y", email, password);
     expect(x).rejects.toThrow(Error);
   });
+
+  test("add a new provider user", async function () {
+    const email = "aaa@gmail.com";
+    const userId = await api.addOrUpdateUser("google", {
+      email: email,
+      given_name: "aaa",
+      family_name: "bbb",
+      name: "aaa bbb",
+      picture: "/abc.jpg",
+    });
+    const user = await api.findById(userId);
+    expect(user.email).toBe(email);
+  });
+
+  test("update changed provider user", async function () {
+    const picture = "/abcd.jpg";
+    const userId = await api.addOrUpdateUser("google", {
+      email: "aaa@gmail.com",
+      given_name: "aaa",
+      family_name: "bbb",
+      name: "aaa bbb",
+      picture: picture,
+    });
+    const user = await api.findById(userId);
+    expect(user.photoUrl).toBe(picture);
+  });
 });
 
 describe("user login tests", function () {
@@ -196,6 +222,29 @@ describe("change password tests", () => {
     let id = user._id.toString();
     const x = () => api.changePassword(id, "12345abc", "12345xyz");
     expect(x).rejects.toThrow(Error);
+  });
+});
+
+describe("manage children accounts", function () {
+  test("attach a new account", async function () {
+    const childId = await api.create("sonit", "sahay", "son@xyz.com", "12345abc");
+    let parent = await api.findByEmail("abc@xyz.com");
+    expect(parent.children.length).toBe(0);
+    await api.addChild(parent._id, childId);
+    parent = await api.findByEmail("abc@xyz.com");
+    expect(parent.children.length).toBe(1);
+  });
+  test("change password", async function () {
+    const email = "son@xyz.com";
+    let user = await api.findByEmail(email);
+    let id = user._id.toString();
+    await api.changePassword(id, "12345abc", "12345xyz");
+    user = await api.findById(id);
+    // test password changed
+    const matches = await api.matchPassword("12345xyz", user.passwordHash, user.salt);
+    expect(matches).toBe(true);
+    // revert
+    await api.changePassword(id, "12345xyz", "12345abc");
   });
 });
 

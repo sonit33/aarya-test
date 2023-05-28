@@ -12,21 +12,26 @@ module.exports = async function (req, res, next) {
         idToken: googleIdToken,
         audience: GOOGLE_CLIENT_ID,
       });
+      req.body.idToken = jwt.decode(googleIdToken);
       return next();
     } catch (e) {
       console.log("Google ID token verification failed: ", e.message);
-      return res.redirect("/login");
+      // return res.status(401).send({ message: "login again" });
+      throw new Error("401");
     }
   } else if (emailIdToken) {
     try {
       jwt.verify(emailIdToken, process.env.JWT_SECRET);
+      req.body.idToken = jwt.decode(emailIdToken);
       return next();
     } catch (err) {
       console.log(err.message);
-      return res.redirect("/login");
+      // return res.status(401).send({ message: "login again" });
+      throw new Error("401");
     }
   } else {
     console.log("missing ID tokens");
-    return res.redirect("/login");
+    // return res.status(400).send({ message: "missing tokens" });
+    throw new Error("400");
   }
 };

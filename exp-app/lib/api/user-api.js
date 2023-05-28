@@ -1,6 +1,6 @@
 const { promisify } = require("util");
 const model = require("../schema/user-schema");
-var { randomBytes, pbkdf2, timingSafeEqual, randomInt } = require("crypto");
+var { randomBytes, pbkdf2, timingSafeEqual, randomInt, createHash } = require("crypto");
 const pbkdf2Async = promisify(pbkdf2);
 
 module.exports = class User {
@@ -60,7 +60,7 @@ module.exports = class User {
       const userId = await this.insert(firstName, lastName, email, passwordHash, salt);
       return userId;
     } catch (e) {
-      throw new Error("Create User Failed", e.message);
+      throw new Error(`Create User Failed: ${e.message}`);
     }
   }
 
@@ -76,7 +76,7 @@ module.exports = class User {
       );
       return userId;
     } catch (e) {
-      throw new Error(`Create User with ${provider} failed`, e);
+      throw new Error(`Create User with ${provider} failed: ${e.message}`);
     }
   }
 
@@ -133,5 +133,33 @@ module.exports = class User {
   async destruct(userId) {
     const user = await this.findById(userId);
     await user.deleteOne({ _id: userId });
+  }
+
+  async addChild(parentId, childId) {
+    const user = await this.findById(parentId);
+    const child = await this.findById(childId);
+    user.children.push(child);
+    await user.updateOne({ children: user.children });
+  }
+
+  async addOrUpdateUser(provider, decodedToken) {
+    try {
+      const { email, given_name, family_name, name, picture } = decodedToken;
+      const user = await this.findByEmail(email);
+      if (user) {
+        await user.updateOne({
+          email: email,
+          firstName: given_name,
+          lastName: family_name,
+          displayName: name,
+          photoUrl: picture,
+        });
+        return user._id.toString();
+      } else {
+        return await this.createWith(provider, given_name, family_name, name, email, picture);
+      }
+    } catch (e) {
+      throw new Error(`Failed to add or update user: ${e.message}`);
+    }
   }
 };

@@ -1,6 +1,7 @@
 var express = require("express");
 var app = express();
-var createError = require("http-errors");
+// var createError = require("http-errors");
+var path = require("path");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 var csrf = require("csurf");
@@ -23,6 +24,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(csrf({ cookie: true }));
 app.use(express.static("./public"));
+app.locals.basedir = path.join(__dirname, "public");
 
 app.use(function (req, res, next) {
   res.locals.csrfToken = req.csrfToken();
@@ -48,9 +50,9 @@ app.use("/", emailAuthRouter);
 app.use("/auth/google", googleAuthRouter);
 // app.use("/", facebookAuthRouter);
 
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
-});
+// // catch 404 and forward to error handler
+// app.use(function (req, res, next) {
+//   next(createError(404));
+// });
 
 module.exports = app;

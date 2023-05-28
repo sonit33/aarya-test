@@ -8,6 +8,8 @@ const client = new OAuth2Client(
   "http://localhost:3001/auth/google/callback"
 );
 const TOKEN_NAME = "googleIdToken";
+const Api = require("../lib/api/user-api");
+const api = new Api();
 
 router.get("/logout", function (req, res) {
   res.clearCookie(TOKEN_NAME);
@@ -28,7 +30,7 @@ router.get("/callback", async function (req, res) {
     const { tokens } = await client.getToken(code);
     const { id_token } = tokens;
     const decodedToken = jwt.decode(id_token);
-    console.log(decodedToken);
+    await api.addOrUpdateUser("google", decodedToken);
     res.cookie(TOKEN_NAME, id_token, {
       httpOnly: true,
       secure: process.env.HTTPS_ENABLED == "true" ? true : false,

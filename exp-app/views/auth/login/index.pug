@@ -6,9 +6,12 @@ include ../../mixins/csrf_hidden
 include ../../mixins/alert
 
 block page-scripts 
-    script(src="/js/validator.js")
-    script(src="/js/alert.js")
-    script(src="/js/login.js")
+    script
+        include /js/validator.js
+    script
+        include /js/alert.js
+    script
+        include /js/login.js
 
 block form
     form(id="login-form")

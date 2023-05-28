@@ -7,7 +7,7 @@ router.get("/", function (req, res, next) {
   res.render("index", { title: "Express" });
 });
 
-router.get("/secure", mustAuth, function (req, res) {
+router.get("/secure", mustAuth, function (err, req, res) {
   res.send("hello");
 });
 

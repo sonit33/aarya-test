@@ -2,8 +2,10 @@ doctype html
 html
   head
     title= title
-    link(rel='stylesheet', href='/css/custom.css')
-    link(rel='stylesheet', href='/css/tw-output.css')
+    style
+      include /css/custom.css
+    style
+      include /css/tw-output.css
     meta(name="viewport" content="width=device-width, initial-scale=1")
     script(src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous")
     link(rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200")

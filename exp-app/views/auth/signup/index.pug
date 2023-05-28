@@ -5,8 +5,10 @@ include ../../mixins/h_1
 include ../../mixins/csrf_hidden
 
 block page-scripts 
-    script(src="/js/validator.js")
-    script(src="/js/signup.js")
+    script
+        include /js/validator.js
+    script
+        include /js/signup.js
 
 block form
     form(id="signup-form")
