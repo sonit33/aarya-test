@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "tw-watch": "npx tailwindcss -i ./public/css/tw-input.css -o ./public/css/tw-output.css --minify --watch",
-    "dev": "nodemon -e js,css,pug ./bin/www",
+    "dev": "nodemon -e js,css,pug ./app",
     "prod": "export NODE_ENV=production && pm2 reload ./bin/www",
     "test": "jest"
   },

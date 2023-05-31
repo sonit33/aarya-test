@@ -1,8 +1,8 @@
 var express = require("express");
 var router = express.Router();
-const Api = require("../lib/api/user-api");
+const Api = require("../../lib/api/user-api");
 const api = new Api();
-const validatePasswordString = require("../lib/utils/password");
+const validatePasswordString = require("../../lib/utils/password");
 const jwt = require("jsonwebtoken");
 const TOKEN_NAME = "emailIdToken";
 

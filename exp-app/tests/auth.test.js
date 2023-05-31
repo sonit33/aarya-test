@@ -1,6 +1,6 @@
-const userApi = require("../lib/api/user-api");
+const userApi = require("../server/lib/api/user-api");
 const api = new userApi();
-const { connect, destroy, disconnect } = require("../lib/utils/mongoose-connect");
+const { connect, destroy, disconnect } = require("../server/lib/utils/mongoose-connect");
 
 beforeAll(async function () {
   require("dotenv").config();

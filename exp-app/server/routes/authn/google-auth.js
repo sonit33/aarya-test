@@ -8,7 +8,7 @@ const client = new OAuth2Client(
   "http://localhost:3001/auth/google/callback"
 );
 const TOKEN_NAME = "googleIdToken";
-const Api = require("../lib/api/user-api");
+const Api = require("../../lib/api/user-api");
 const api = new Api();
 
 router.get("/logout", function (req, res) {

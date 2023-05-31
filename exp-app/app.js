@@ -6,15 +6,16 @@ var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 var csrf = require("csurf");
 const cors = require("cors");
+const port = 3001;
 require("dotenv").config();
 
-const { connect } = require("./lib/utils/mongoose-connect");
+const { connect } = require("./server/lib/utils/mongoose-connect");
 (async function () {
   await connect(process.env.MONGO_APP);
 })();
 
 // view engine setup
-app.set("views", "./views");
+app.set("views", "./server/views");
 app.set("view engine", "pug");
 
 app.use(express.json());
@@ -46,9 +47,9 @@ app.use(function (req, res, next) {
 });
 
 // set routes
-var indexRouter = require("./routes/index");
-var emailAuthRouter = require("./routes/email-auth");
-var googleAuthRouter = require("./routes/google-auth");
+var indexRouter = require("./server/routes/index");
+var emailAuthRouter = require("./server/routes/authn/email-auth");
+var googleAuthRouter = require("./server/routes/authn/google-auth");
 // var facebookAuthRouter = require("./routes/facebook-auth");
 
 app.use("/", indexRouter);
@@ -61,4 +62,6 @@ app.use("/auth/google", googleAuthRouter);
 //   next(createError(404));
 // });
 
-module.exports = app;
+// module.exports = app;
+
+app.listen(port, () => console.log(`server started on port:${port}`));
