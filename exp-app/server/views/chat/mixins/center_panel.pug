@@ -1,0 +1,16 @@
+include ../../mixins/form_default
+
+mixin input_bar()
+    div(class="sticky w-full bottom-0 bg-gray-100 justify-center p-4 border-t-2 border-gray-300")
+        +form_default("chat-form") 
+            input(type="text" maxlength=512 class="w-full" class="p-2 border rounded shadow" placeholder="Send a message." name="message" id="message")
+            span Aarya can be inaccurate sometimes about people, places, or facts.
+            
+mixin chat_section(req,res)
+    div(class="chat-log flex flex-col gap-4 p-2")
+
+mixin center_panel()
+    div(class="flex flex-col min-h-screen justify-end relative")
+        +chat_section()
+        +input_bar()
+        

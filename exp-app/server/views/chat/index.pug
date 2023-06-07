@@ -1,0 +1,19 @@
+extends layout.pug
+include ./mixins/left_panel 
+include ./mixins/right_panel 
+include ./mixins/center_panel
+
+block page-scripts 
+    script
+        include /js/validator.js
+    script
+        include /js/chat.js
+
+block left
+    +left_panel()
+block center 
+    //- mx-auto max-w-lg lg:max-w-xl xl:max-w-2xl 
+    +center_panel()
+block right 
+    +right_panel()
+

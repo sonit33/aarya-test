@@ -1,0 +1,7 @@
+include ./csrf_hidden
+
+mixin form_default(id)
+    form(method="POST" id=id action="/" class="w-full flex flex-col gap-2")
+        +csrf_hidden(csrfToken)
+        block
+

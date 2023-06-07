@@ -2,7 +2,7 @@ extends ../layout.pug
 include ../../mixins/icon_button
 include ../../mixins/text_group
 include ../../mixins/h_1
-include ../../mixins/csrf_hidden
+include ../../mixins/form_default
 include ../../mixins/alert
 
 block page-scripts 
@@ -14,12 +14,11 @@ block page-scripts
         include /js/login.js
 
 block form
-    form(id="login-form")
+    +form_default("login-form")
         +h_1("Login to your Account")
         +alert_info()
         +text_group("email", "email", "Email", "Enter your email address")
         +text_group("password", "password", "Password", "Enter your password")
-        +csrf_hidden(csrfToken)
         .mt-4.flex 
             +icon_button("login-button", "login", "Login")
         div(class="mt-4 flex flex-col text-sm gap-2 text-gray-500")

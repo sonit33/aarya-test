@@ -8,28 +8,28 @@ const TOKEN_NAME = "emailIdToken";
 
 // GETs
 router.get("/forgot-password", function (req, res) {
-  res.render("auth/forgot-password/index", {
+  res.render("authn/forgot-password/index", {
     title: "Aarya: Forgot Password",
     csrfToken: req.csrfToken(),
   });
 });
 
 router.get("/login", function (req, res) {
-  res.render("auth/login/index", {
+  res.render("authn/login/index", {
     title: "Aarya: Login",
     csrfToken: req.csrfToken(),
   });
 });
 
 router.get("/signup", async function (req, res) {
-  res.render("auth/signup/index", { title: "Aarya: Signup", csrfToken: req.csrfToken() });
+  res.render("authn/signup/index", { title: "Aarya: Signup", csrfToken: req.csrfToken() });
 });
 
 router.get("/verification/:userId", async function (req, res) {
   const user = await api.findById(req.params.userId);
   // render a verified page if already verified
   // otherwise render the verification page
-  res.render("auth/signup/verification", {
+  res.render("authn/signup/verification", {
     title: "Aarya: Email verification",
     email: user.email,
     userId: req.params.userId,

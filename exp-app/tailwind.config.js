@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./views/**/*.pug"],
+  content: ["./server/views/**/*.pug", "./public/**/*.js"],
   theme: {
     fontFamily: {
       hubot: "Hubot Sans",

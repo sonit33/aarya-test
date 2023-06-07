@@ -1,6 +1,6 @@
 const { promisify } = require("util");
 const model = require("../schema/user-schema");
-var { randomBytes, pbkdf2, timingSafeEqual, randomInt, createHash } = require("crypto");
+var { randomBytes, pbkdf2, timingSafeEqual, randomInt } = require("crypto");
 const pbkdf2Async = promisify(pbkdf2);
 
 module.exports = class User {
@@ -148,7 +148,6 @@ module.exports = class User {
       const user = await this.findByEmail(email);
       if (user) {
         await user.updateOne({
-          email: email,
           firstName: given_name,
           lastName: family_name,
           displayName: name,

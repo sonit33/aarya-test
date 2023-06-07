@@ -7,7 +7,7 @@ router.get("/", function (req, res, next) {
   res.render("index", { title: "Aarya AI" });
 });
 
-router.get("/secure", mustAuth, function (err, req, res) {
+router.get("/secure", mustAuth, function (req, res) {
   res.send("hello");
 });
 

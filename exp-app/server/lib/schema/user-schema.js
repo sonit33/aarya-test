@@ -55,7 +55,7 @@ const userSchema = new Schema({
   timeCreated: { type: String, default: Date.now().toString() },
   passwordHash: String,
   salt: String,
-  children: [{ type: mongoose.Types.ObjectId, ref: "Users" }],
+  children: [{ type: mongoose.Types.ObjectId }],
 });
 
 module.exports = mongoose.model("Users", userSchema);

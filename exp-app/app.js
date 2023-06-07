@@ -50,11 +50,13 @@ app.use(function (req, res, next) {
 var indexRouter = require("./server/routes/index");
 var emailAuthRouter = require("./server/routes/authn/email-auth");
 var googleAuthRouter = require("./server/routes/authn/google-auth");
+var chatRouter = require("./server/routes/chat");
 // var facebookAuthRouter = require("./routes/facebook-auth");
 
 app.use("/", indexRouter);
 app.use("/", emailAuthRouter);
 app.use("/auth/google", googleAuthRouter);
+app.use("/chat", chatRouter);
 // app.use("/", facebookAuthRouter);
 
 // // catch 404 and forward to error handler
